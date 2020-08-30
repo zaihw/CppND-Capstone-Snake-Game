@@ -8,8 +8,8 @@ Game::Game(const std::size_t &grid_width, const std::size_t &grid_height)
     : snake(grid_width, grid_height),
       engine(dev()), // engine use a pseudo random number as seed, make sure
       // each constructor call, engine will have a different initial state
-      random_w(0, static_cast<int>(grid_width)),
-      random_h(0, static_cast<int>(grid_height)) {
+      random_w(0, static_cast<int>(grid_width) - 1),
+      random_h(0, static_cast<int>(grid_height) - 1) {
   PlaceFood();
 }
 
@@ -92,6 +92,6 @@ void Game::Update() {
     PlaceFood();
     // Grow snake and increase speed.
     snake.GrowBody();
-    snake.speed += 0.025;
+    snake.speed += 0.015;
   }
 }
