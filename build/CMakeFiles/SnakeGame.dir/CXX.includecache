@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/zw/Documents/CppND/CppND-Capstone-Snake-Game/src/renderer.cpp
+renderer.h
+/home/zw/Documents/CppND/CppND-Capstone-Snake-Game/src/renderer.h
+iostream
+-
+string
+-
+
+/home/zw/Documents/CppND/CppND-Capstone-Snake-Game/src/renderer.h
+vector
+-
+SDL2/SDL.h
+-
+snake.h
+/home/zw/Documents/CppND/CppND-Capstone-Snake-Game/src/snake.h
+
+/home/zw/Documents/CppND/CppND-Capstone-Snake-Game/src/snake.h
+iostream
+-
+vector
+-
+SDL2/SDL.h
+-
+deque
+-
+
