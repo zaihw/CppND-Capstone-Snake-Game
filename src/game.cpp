@@ -1,33 +1,39 @@
 #include "game.h"
-#include <iostream>
 #include "SDL.h"
+#include <iostream>
 
-Game::Game(std::size_t grid_width, std::size_t grid_height)
+std::mutex mutlock;
+
+Game::Game(const std::size_t &grid_width, const std::size_t &grid_height)
     : snake(grid_width, grid_height),
-      engine(dev()),
+      engine(dev()), // engine use a pseudo random number as seed, make sure
+      // each constructor call, engine will have a different initial state
       random_w(0, static_cast<int>(grid_width)),
       random_h(0, static_cast<int>(grid_height)) {
   PlaceFood();
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
-               std::size_t target_frame_duration) {
-  Uint32 title_timestamp = SDL_GetTicks();
+               const std::size_t &target_frame_duration) {
+  Uint32 title_timestamp =
+      SDL_GetTicks(); // title is also updating, get a timestamp for .this title
   Uint32 frame_start;
   Uint32 frame_end;
   Uint32 frame_duration;
   int frame_count = 0;
   bool running = true;
 
+  std::cout << "Game Starting...!\n";
   while (running) {
-    frame_start = SDL_GetTicks();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    frame_start = SDL_GetTicks(); // timestamp start of frame
 
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
     renderer.Render(snake, food);
 
-    frame_end = SDL_GetTicks();
+    frame_end = SDL_GetTicks(); // timestamp end of frame
 
     // Keep track of how long each loop through the input/update/render cycle
     // takes.
@@ -36,7 +42,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(score, frame_count);
+      renderer.UpdateWindowTitle(GetScore(), frame_count);
       frame_count = 0;
       title_timestamp = frame_end;
     }
@@ -50,9 +56,14 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
+int Game::GetScore() const { return score; }
+int Game::GetSize() const { return snake.size; }
+
 void Game::PlaceFood() {
   int x, y;
   while (true) {
+    // engine initial state is different in each Game constructor call
+    // so food placement will be different in each game
     x = random_w(engine);
     y = random_h(engine);
     // Check that the location is not occupied by a snake item before placing
@@ -66,22 +77,21 @@ void Game::PlaceFood() {
 }
 
 void Game::Update() {
-  if (!snake.alive) return;
+  if (!snake.alive)
+    return;
 
   snake.Update();
 
-  int new_x = static_cast<int>(snake.head_x);
-  int new_y = static_cast<int>(snake.head_y);
+  // int new_x = static_cast<int>(snake.head_x);
+  // int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
+  if (food.x == static_cast<int>(snake.head_x) &&
+      food.y == static_cast<int>(snake.head_y)) {
     score++;
     PlaceFood();
     // Grow snake and increase speed.
     snake.GrowBody();
-    snake.speed += 0.02;
+    snake.speed += 0.025;
   }
 }
-
-int Game::GetScore() const { return score; }
-int Game::GetSize() const { return snake.size; }

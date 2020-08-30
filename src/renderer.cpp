@@ -2,9 +2,9 @@
 #include <iostream>
 #include <string>
 
-Renderer::Renderer(const std::size_t screen_width,
-                   const std::size_t screen_height,
-                   const std::size_t grid_width, const std::size_t grid_height)
+Renderer::Renderer(const std::size_t &screen_width,
+                   const std::size_t &screen_height,
+                   const std::size_t &grid_width, const std::size_t &grid_height)
     : screen_width(screen_width),
       screen_height(screen_height),
       grid_width(grid_width),
@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food) {
+void Renderer::Render(Snake const &snake, SDL_Point const &food) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
