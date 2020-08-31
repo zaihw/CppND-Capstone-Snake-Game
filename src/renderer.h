@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include "snake.h"
 
+// Renderer class renders SnakeGame to screen
 class Renderer {
  public:
   Renderer(const std::size_t &screen_width, const std::size_t &screen_height,

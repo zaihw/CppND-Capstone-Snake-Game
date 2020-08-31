@@ -23,9 +23,21 @@ In this project, you can build your own C++ application or extend this Snake gam
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
 
-## Basic Build Instructions
+## Basic Build and Run Instructions
 
 1. Clone this repo.
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./SnakeGame`.
+4. Run it: 
+  * `./SnakeGame`.
+  * type in 1, 2, or 3 to select difficulity.
+  * use Up, Down, Left, and Right to drive the snake
+
+## Rubric
+1. The project demonstrates an understanding of C++ functions and control structures. (game.cpp#L110)
+2. The project accepts user input and processes the input. (controller.cpp#L12)
+3. The project uses OOP techniques.
+4. Classes use appropriate access specifiers for class members.
+5. Class encapsulates behaviors
+6. The project makes use of references in function declarations. (game.h#L18)
+7. The project uses destructors appropriately.

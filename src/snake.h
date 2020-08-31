@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 #include <deque>
 
+// Snake class defines the snake object which will be used(updated) in the game 
 class Snake {
  public:
   enum class Direction { kUp, kDown, kLeft, kRight };

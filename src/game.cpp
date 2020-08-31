@@ -15,43 +15,56 @@ Game::Game(const std::size_t &grid_width, const std::size_t &grid_height)
 
 void Game::Run(Controller const &controller, Renderer &renderer,
                const std::size_t &target_frame_duration) {
-  Uint32 title_timestamp =
-      SDL_GetTicks(); // title is also updating, get a timestamp for .this title
-  Uint32 frame_start;
-  Uint32 frame_end;
-  Uint32 frame_duration;
-  int frame_count = 0;
   bool running = true;
 
+  // take user input to select difficulity level
   std::cout << "Game Starting...!\n";
+  std::cout << "Choose difficulity level:" << std::endl;
+  std::cout << "easy: 1" << std::endl;
+  std::cout << "medium: 2" << std::endl;
+  std::cout << "hard: 3" << std::endl;
+  std::cin >> difficulity_level;
+
+  // running game and update game state
   while (running) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    frame_start = SDL_GetTicks(); // timestamp start of frame
+    if (difficulity_level != 0) {
+      Uint32 title_timestamp = SDL_GetTicks(); // title is also updating, get a
+                                               // timestamp for .this title
+      Uint32 frame_start;
+      Uint32 frame_end;
+      Uint32 frame_duration;
+      int frame_count = 0;
 
-    // Input, Update, Render - the main game loop.
-    controller.HandleInput(running, snake);
-    Update();
-    renderer.Render(snake, food);
+      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      frame_start = SDL_GetTicks(); // timestamp start of frame
 
-    frame_end = SDL_GetTicks(); // timestamp end of frame
+      // Input, Update, Render - the main game loop.
+      controller.HandleInput(running, snake);
+      Update();
+      renderer.Render(snake, food);
 
-    // Keep track of how long each loop through the input/update/render cycle
-    // takes.
-    frame_count++;
-    frame_duration = frame_end - frame_start;
+      frame_end = SDL_GetTicks(); // timestamp end of frame
 
-    // After every second, update the window title.
-    if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(GetScore(), frame_count);
-      frame_count = 0;
-      title_timestamp = frame_end;
-    }
+      // Keep track of how long each loop through the input/update/render cycle
+      // takes.
+      frame_count++;
+      frame_duration = frame_end - frame_start;
 
-    // If the time for this frame is too small (i.e. frame_duration is
-    // smaller than the target ms_per_frame), delay the loop to
-    // achieve the correct frame rate.
-    if (frame_duration < target_frame_duration) {
-      SDL_Delay(target_frame_duration - frame_duration);
+      // After every second, update the window title.
+      if (frame_end - title_timestamp >= 1000) {
+        renderer.UpdateWindowTitle(GetScore(), frame_count);
+        frame_count = 0;
+        title_timestamp = frame_end;
+      }
+
+      // If the time for this frame is too small (i.e. frame_duration is
+      // smaller than the target ms_per_frame), delay the loop to
+      // achieve the correct frame rate.
+      if (frame_duration < target_frame_duration) {
+        SDL_Delay(target_frame_duration - frame_duration);
+      }
+    } else {
+      std::cout << "Invalid input, type in 1, 2, or 3." << std::endl;
     }
   }
 }
@@ -92,6 +105,22 @@ void Game::Update() {
     PlaceFood();
     // Grow snake and increase speed.
     snake.GrowBody();
-    snake.speed += 0.015;
+
+    // update snake speed based on difficulity level
+    switch (difficulity_level) {
+    case 1:
+      snake.speed += 0.005;
+      break;
+    case 2:
+      snake.speed += 0.010;
+      break;
+    case 3:
+      snake.speed += 0.015;
+      break;
+    default:
+      std::cout << "Invalid input!" << std::endl;
+      std::cout << "Type in only number 1, 2, or 3 to select difficulity level."
+                << std::endl;
+    }
   }
 }
